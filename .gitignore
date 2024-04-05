@@ -1,0 +1,5 @@
+*.log
+Gemfile.lock
+relatorio-e2e-locaweb-ruby.*
+features/support/fixtures/*.json
+!features/support/fixtures/*.example.json

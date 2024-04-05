@@ -1,0 +1,95 @@
+name: Pipeline Testes Automatizados E2E Locaweb Ruby
+
+# executa o workflow toda vez que for realizado um push ou pull-request no repositório
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+  # permite também executar esse workflow manualmente na aba "Actions" do GitHub
+  workflow_dispatch:
+
+jobs:
+  ruby-chrome:
+      # agente de execução/runner do tipo máquina virtual bem enxuta, sem interface gráfica
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Passo 1 - Obter cópia do código-fonte do repositório
+        uses: actions/checkout@v3
+
+      - name: Passo 2 - Redirecionar os conteúdos de "secrets.USUARIO_ENV", "secrets.DOMINIO_ENV", para os arquivos "login.json", "usuario.json", etc
+        run: |
+          echo '${{ secrets.USUARIO_ENV }}' > ./features/support/fixtures/usuario.json
+          echo '${{ secrets.DOMINIO_ENV }}' > ./features/support/fixtures/dominio.json
+     
+      - name: Passo 3 - Instalar ruby e Instalar dependências 
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.2'
+          # executa o comando bundle install e armazena as gems instaladas automaticamente
+          bundler-cache: true
+        
+      - name: Passo 4 - Executar testes no navegador chrome em modo headless (2º plano) em um ambiente de produção e Gerar os resultados dos testes
+        run: bundle exec cucumber -p ci
+
+      - name: Passo 5 - Armazenar os resultados dos testes em relatório html
+        uses: actions/upload-artifact@v3
+        # expressão condicional para que sempre seja executado independentemente dos resultados dos steps anteriores
+        if: ${{ always() }}
+        with: 
+            name: relatorio_html_chrome
+            path: ./relatorios/relatorio-e2e-locaweb-ruby.html
+            # armazena o relatório html por 30 dias
+            retention-days: 30
+            
+      - name: Passo 6 - Armazenar os resultados dos testes em screenshots
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with: 
+            name: screenshots_chrome
+            path: ./relatorios/screenshots
+            retention-days: 30
+
+  ruby-firefox:
+      # job "ruby-firefox" somente é executado se o job anterior "ruby-chrome" for executado com sucesso
+      needs: ruby-chrome
+      runs-on: ubuntu-latest
+
+      steps:
+      - name: Passo 1 - Obter cópia do código-fonte do repositório
+        uses: actions/checkout@v3
+
+      - name: Passo 2 - Redirecionar os conteúdos de "secrets.USUARIO_ENV", "secrets.DOMINIO_ENV", para os arquivos "login.json", "usuario.json", etc
+        run: |
+          echo '${{ secrets.USUARIO_ENV }}' > ./features/support/fixtures/usuario.json
+          echo '${{ secrets.DOMINIO_ENV }}' > ./features/support/fixtures/dominio.json
+     
+      - name: Passo 3 - Instalar ruby e Instalar dependências 
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.2'
+          bundler-cache: true
+        
+      - name: Passo 4 - Executar testes no navegador firefox em modo headless (2º plano) em um ambiente de produção e Gerar os resultados dos testes
+        run: bundle exec cucumber -p ci_ff
+
+      - name: Passo 5 - Armazenar os resultados dos testes em relatório html
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with: 
+            name: relatorio_html_firefox
+            path: ./relatorios/relatorio-e2e-locaweb-ruby.html
+            retention-days: 30
+            
+      - name: Passo 6 - Armazenar os resultados dos testes em screenshots
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with: 
+            name: screenshots_firefox
+            path: ./relatorios/screenshots
+            retention-days: 30
+
+
+            
