@@ -1,6 +1,11 @@
 {
-    "dominio_nacional_diferente_org_br": {
+    "dominio_nacional": {
         "nome_dominio_nacional_diferente_org_br_cpf": "informar-nome-dominio-nacional-diferente-org-br-cpf",
-        "extensao_dominio_nacional_diferente_org_br": "informar-extensao-dominio-nacional-diferente-org-br"
+        "extensao_dominio_nacional_diferente_org_br": "informar-extensao-dominio-nacional-diferente-org-br-sem-1°-ponto"
+    },
+    "dominio_internacional": {
+        "nome_dominio_internacional_nao_uso": "informar-nome-dominio-internacional-nao-esteja-em-uso",
+        "extensao_dominio_internacional": "informar-extensao-dominio-internacional-sem-1°-ponto",
+        "nome_dominio_internacional_uso": "informar-nome-dominio-internacional-esteja-em-uso"
     }
 }

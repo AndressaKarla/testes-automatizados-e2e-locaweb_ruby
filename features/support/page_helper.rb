@@ -12,5 +12,4 @@ module Pages
     def contratar_registro_dominio
         @contratar_registro_dominio ||= ContratarRegistroDominio.new
     end
-
 end
