@@ -19,7 +19,7 @@ jobs:
       - name: Passo 1 - Obter cópia do código-fonte do repositório
         uses: actions/checkout@v3
 
-      - name: Passo 2 - Redirecionar os conteúdos de "secrets.USUARIO_ENV", "secrets.DOMINIO_ENV", para os arquivos "login.json", "usuario.json", etc
+      - name: Passo 2 - Redirecionar os conteúdos de "secrets.USUARIO_ENV", "secrets.DOMINIO_ENV", para os arquivos "usuario.json", "dominio.json", etc
         run: |
           echo '${{ secrets.USUARIO_ENV }}' > ./features/support/fixtures/usuario.json
           echo '${{ secrets.DOMINIO_ENV }}' > ./features/support/fixtures/dominio.json
@@ -61,7 +61,7 @@ jobs:
       - name: Passo 1 - Obter cópia do código-fonte do repositório
         uses: actions/checkout@v3
 
-      - name: Passo 2 - Redirecionar os conteúdos de "secrets.USUARIO_ENV", "secrets.DOMINIO_ENV", para os arquivos "login.json", "usuario.json", etc
+      - name: Passo 2 - Redirecionar os conteúdos de "secrets.USUARIO_ENV", "secrets.DOMINIO_ENV", para os arquivos "usuario.json", "dominio.json", etc
         run: |
           echo '${{ secrets.USUARIO_ENV }}' > ./features/support/fixtures/usuario.json
           echo '${{ secrets.DOMINIO_ENV }}' > ./features/support/fixtures/dominio.json
